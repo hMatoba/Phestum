@@ -9,20 +9,27 @@ To write JS tests that runs on PhantomJS.
 How to Use
 ----------
 
-Put test scripts into '/tests' directory. Run phestum.js. Pass scripts that should be loaded as arguments. 
+Write tests as method of 'Tests'. Method name must contain 'Test'.
 
 ::
 
-    phantomjs phestum.js /lib/lib1.js
-
-Write tests as method of 'Tests'. Method name must contains 'Test'.
-
-::
-
+    // tests.js
     Tests.Test1 = function () {
         phestum.assertEqual(1, 1);
         phestum.assertNotEqual(1, 0);
     };
+
+Put the test scripts into '/tests' directory. Run phestum.js.
+
+::
+
+    phantomjs phestum.js
+
+ Pass scripts that should be loaded as arguments. 
+
+::
+
+    phantomjs phestum.js /lib/lib1.js
 
 If files exist in /tests/files/, it can access the data via 'Tests.files'.
 

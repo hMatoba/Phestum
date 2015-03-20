@@ -1,6 +1,8 @@
 Phestum
 =======
 
+.. image:: https://travis-ci.org/hMatoba/Phestum.svg?branch=master
+    :target: https://travis-ci.org/hMatoba/Phestum
 
 To write JS tests that runs on PhantomJS.
 

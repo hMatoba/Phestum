@@ -72,9 +72,9 @@ var phestum = {
 
 
 var Tests = {
-    pass: 0,
-    fail: 0,
     _exec: function () {
+        var pass = 0;
+        var fail = 0;
         var keys = Object.keys(Tests);
         var tests = keys.filter(function (item) {
             return (item[0] !== "_" &&
@@ -90,18 +90,18 @@ var Tests = {
                 Tests[tests[p]]();
                 console.log("=============");
                 console.log("passed.");
-                Tests.pass += 1;
+                pass += 1;
             } catch (e) {
                 console.log("=============");
                 console.log(e);
                 console.log("failed.");
-                Tests.fail += 1;
+                fail += 1;
             }
         }
 
-        console.log("\n\nPassed: " + Tests.pass);
-        console.log("Failed: " + Tests.fail);
-        if (Tests.fail) {
+        console.log("\n\nPassed: " + pass);
+        console.log("Failed: " + fail);
+        if (fail) {
             return false;
         } else {
             return true;

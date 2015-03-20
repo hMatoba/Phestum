@@ -37,8 +37,8 @@ If files exist in /tests/files/, it can access the data via 'Tests.files'.
 
     Tests.ShowFilesTest = function () {
         var files = Tests.files;
-        for (var key in files) {
-            console.log(key + ": " + files[key]);
+        for (var filename in files) {
+            console.log(filename + ": " + files[filename]);
         }
     };
 

@@ -146,12 +146,12 @@ var Tests = {
                     return [".", ".."].indexOf(item) == -1;
                 })
                 .map(function (item) {
-                    return "tests/files/" + item;
+                    return item;
                 });
 
         console.log(optionFiles);
-        for (var p=0; p<testFiles.length; p++) {
-            files[optionFiles[p]] = fs.read(optionFiles[p], {charset: "LATIN-1"});
+        for (var p=0; p<optionFiles.length; p++) {
+            files[optionFiles[p]] = fs.read("tests/files/" + optionFiles[p], {charset: "LATIN-1"});
         }
     }
     Tests.files = files;

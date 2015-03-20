@@ -19,7 +19,7 @@ Write tests as method of 'Tests'. Method name must contain 'Test'.
         phestum.assertNotEqual(1, 0);
     };
 
-Put the test scripts into '/tests' directory. Run phestum.js.
+Put the test scripts into 'tests' directory. Run phestum.js.
 
 ::
 
@@ -29,9 +29,9 @@ Pass scripts that should be loaded as arguments.
 
 ::
 
-    phantomjs phestum.js /lib/lib1.js
+    phantomjs phestum.js lib/lib1.js
 
-If files exist in /tests/files/, it can access the data via 'Tests.files'.
+If files exist in tests/files/, it can access the data via 'Tests.files'.
 
 ::
 

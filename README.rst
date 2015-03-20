@@ -25,7 +25,7 @@ Put the test scripts into '/tests' directory. Run phestum.js.
 
     phantomjs phestum.js
 
- Pass scripts that should be loaded as arguments. 
+Pass scripts that should be loaded as arguments. 
 
 ::
 

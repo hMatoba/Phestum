@@ -11,9 +11,7 @@ Tests.Test1 = function () {
 };
 
 
-Tests.Test2 = function () {
-    console.log("assert check");
-    
+Tests.AssertTest = function () {
     phestum.assertEqual(null, null);
     phestum.assertEqual(undefined, undefined);
     
@@ -62,6 +60,11 @@ Tests.ShowFilesTest = function () {
     }
 };
 
+
+Tests.LibTest = function () {
+    dummyLib1();
+    dummyLib2();
+};
 
 //Tests.FailTest1 = function () {
 //    throw("fail test");

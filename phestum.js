@@ -24,6 +24,8 @@ var phestum = {
             }
             var propA = Object.getOwnPropertyNames(a);
             var propB = Object.getOwnPropertyNames(b);
+            propA.sort();
+            propB.sort();
 
             // check property names equality
             if (propA.length !== propB.length) {

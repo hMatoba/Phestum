@@ -4,7 +4,7 @@ Phestum
 .. image:: https://travis-ci.org/hMatoba/Phestum.svg?branch=master
     :target: https://travis-ci.org/hMatoba/Phestum
 
-To write JS tests that runs on PhantomJS.
+To write JS tests that run on PhantomJS. Easy to use local files in tests.
 
 How to Use
 ----------

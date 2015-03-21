@@ -145,15 +145,15 @@ Tests._tests = fs.list("tests/")
             return item.indexOf(".js") !== -1;
         })
         .map(function (item) {
-            return 'tests/' + item;
+            return fs.read('tests/' + item);
         });
 
 // load libs and tests
-for (var p=0; p<Tests._libs.length; p++) {
-    eval(Tests._libs[p]);
+for (Tests._counter=0; Tests._counter<Tests._libs.length; Tests._counter++) {
+    eval(Tests._libs[Tests._counter]);
 }
-for (var p=0; p<Tests._tests.length; p++) {
-    eval(fs.read(Tests._tests[p]));
+for (Tests._counter=0; Tests._counter<Tests._tests.length; Tests._counter++) {
+    eval(Tests._tests[Tests._counter]);
 }
 
 // run tests

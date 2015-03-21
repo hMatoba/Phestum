@@ -55,8 +55,8 @@ Tests.AssertTest = function () {
 // If files exist in /tests/files/, it can access the data via 'Tests.files'.
 Tests.ShowFilesTest = function () {
     var files = Tests.files;
-    for (var key in files) {
-        console.log(key + ": " + files[key]);
+    for (var filename in files) {
+        console.log(filename + ": " + files[filename]);
     }
 };
 
@@ -66,6 +66,9 @@ Tests.LibTest = function () {
     dummyLib2();
 };
 
-//Tests.FailTest1 = function () {
-//    throw("fail test");
-//};
+
+Tests.FailTest1 = function () {
+    phestum.assertFail(function () {
+        throw("fail test");
+    });
+};

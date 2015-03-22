@@ -139,6 +139,7 @@ console.log("test: " + JSON.stringify(Tests._testNames));
 
 var pass = 0;
 var fail = 0;
+var scripts = Tests._libs.concat(Tests._tests);
 for (var tCount=0; tCount<Tests._testNames.length; tCount++) {
     var testName = Tests._testNames[tCount];
     var gotError = false;
@@ -148,12 +149,12 @@ for (var tCount=0; tCount<Tests._testNames.length; tCount++) {
     page.content = "<html><body></body></html>";
     page.onError = function (msg, trace) {
         var msgStack = ['ERROR: ' + msg];
-//        if (trace && trace.length) {
-//            msgStack.push('**TRACE:');
-//            trace.forEach(function(t) {
-//              msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function +'")' : ''));
-//            });
-//        }
+        if (trace && trace.length) {
+            msgStack.push('**TRACE:');
+            trace.forEach(function(t) {
+              msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function +'")' : ''));
+            });
+        }
         console.error("**" + msgStack.join('\n'));
         gotError = true;
     };
@@ -161,18 +162,23 @@ for (var tCount=0; tCount<Tests._testNames.length; tCount++) {
     page.onConsoleMessage = function(msg, lineNum, sourceId) {
         console.log('' + msg);
     };
-       
-    for (var p=0; p<Tests._libs.length; p++) {
+
+    for (var p=0; p<scripts.length; p++) {
         page.evaluate(function (script) {
             var scrEl = document.createElement("script");
             scrEl.text = script;
             document.body.appendChild(scrEl);
-        }, Tests._libs[p]);
-
+        }, scripts[p]);
     }
 
+    var testRun = "Tests." + testName + "();";
     page.evaluate(function (obj) {Tests.files = obj;}, Tests._files);
-    page.evaluate(Tests[testName]);
+    page.evaluate(function (script) {
+        var scrEl = document.createElement("script");
+        scrEl.text = script;
+        document.body.appendChild(scrEl);
+    }, testRun);
+
     
     console.log("=============");
     if (gotError) {

@@ -107,15 +107,14 @@ if (fs.isDirectory("tests/files")) {
 }
 
 // prepare libraries
-Tests._libs = [];
-if (system.args.length > 1) {
-    var libFiles = system.args.slice(1);
-    console.log("lib: " + JSON.stringify(libFiles));
-    Tests._libs = libFiles.map(function (i) {
-        return fs.read(i);
-    });
-}
-Tests._libs.unshift(phestumLib);
+Tests._lib = fs.list("lib/")
+        .filter(function(item) {
+            return item.indexOf(".js") !== -1;
+        })
+        .map(function (item) {
+            return 'lib/' + item;
+        });
+console.log("lib: " + JSON.stringify(Tests._lib));
 
 // prepare tests
 Tests._tests = fs.list("tests/")
@@ -123,12 +122,12 @@ Tests._tests = fs.list("tests/")
             return item.indexOf(".js") !== -1;
         })
         .map(function (item) {
-            return fs.read('tests/' + item);
+            return 'tests/' + item;
         });
 
 // load tests
 for (Tests._counter=0; Tests._counter<Tests._tests.length; Tests._counter++) {
-    eval(Tests._tests[Tests._counter]);
+    eval(fs.read(Tests._tests[Tests._counter]));
 }
 Tests._testNames = Object.keys(Tests).filter(function (item) {
     return (item[0] !== "_" &&
@@ -137,49 +136,52 @@ Tests._testNames = Object.keys(Tests).filter(function (item) {
 });
 console.log("test: " + JSON.stringify(Tests._testNames));
 
+// prepare test environment
+var jsScripts = Tests._lib.concat(Tests._tests);
+var page = require('webpage').create();
+page.onError = function (msg, trace) {
+    var msgStack = ['ERROR: ' + msg];
+    if (trace && trace.length) {
+        msgStack.push('**TRACE:');
+        trace.forEach(function(t) {
+          msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function +'")' : ''));
+        });
+    }
+    console.error("**" + msgStack.join('\n'));
+    gotError = true;
+};
+
+page.onConsoleMessage = function(msg, lineNum, sourceId) {
+    console.log('' + msg);
+};
+
+page.evaluate(function (script) {
+    var scrEl = document.createElement("script");
+    scrEl.text = script;
+    document.body.appendChild(scrEl);
+}, phestumLib);
+
+for (var p=0; p<jsScripts.length; p++) {
+    page.injectJs(jsScripts[p]);
+}
+
+page.evaluate(function (files) {Tests.files = files;}, Tests._files);
+
+// do tests
 var pass = 0;
 var fail = 0;
-var scripts = Tests._libs.concat(Tests._tests);
-for (var tCount=0; tCount<Tests._testNames.length; tCount++) {
-    var testName = Tests._testNames[tCount];
+for (var p=0; p<Tests._testNames.length; p++) {
+    var testName = Tests._testNames[p];
     var gotError = false;
-    var page = require('webpage').create();
     console.log("\n\n" + testName);
     console.log("=============");
-    page.content = "<html><body></body></html>";
-    page.onError = function (msg, trace) {
-        var msgStack = ['ERROR: ' + msg];
-        if (trace && trace.length) {
-            msgStack.push('**TRACE:');
-            trace.forEach(function(t) {
-              msgStack.push(' -> ' + t.file + ': ' + t.line + (t.function ? ' (in function "' + t.function +'")' : ''));
-            });
-        }
-        console.error("**" + msgStack.join('\n'));
-        gotError = true;
-    };
 
-    page.onConsoleMessage = function(msg, lineNum, sourceId) {
-        console.log('' + msg);
-    };
-
-    for (var p=0; p<scripts.length; p++) {
-        page.evaluate(function (script) {
-            var scrEl = document.createElement("script");
-            scrEl.text = script;
-            document.body.appendChild(scrEl);
-        }, scripts[p]);
-    }
-
-    var testRun = "Tests." + testName + "();";
-    page.evaluate(function (obj) {Tests.files = obj;}, Tests._files);
-    page.evaluate(function (script) {
+    page.evaluate(function (testName) {
         var scrEl = document.createElement("script");
-        scrEl.text = script;
+        scrEl.text = "Tests." + testName + "();";
         document.body.appendChild(scrEl);
-    }, testRun);
+    }, testName);
 
-    
     console.log("=============");
     if (gotError) {
         fail += 1;

@@ -125,17 +125,6 @@ Tests._tests = fs.list("tests/")
             return 'tests/' + item;
         });
 
-// load tests
-for (Tests._counter=0; Tests._counter<Tests._tests.length; Tests._counter++) {
-    eval(fs.read(Tests._tests[Tests._counter]));
-}
-Tests._testNames = Object.keys(Tests).filter(function (item) {
-    return (item[0] !== "_" &&
-            typeof(Tests[item]) === "function" &&
-            item.indexOf("Test") > -1);
-});
-console.log("test: " + JSON.stringify(Tests._testNames));
-
 // prepare test environment
 var jsScripts = Tests._lib.concat(Tests._tests);
 var page = require('webpage').create();
@@ -167,34 +156,54 @@ for (var p=0; p<jsScripts.length; p++) {
 
 page.evaluate(function (files) {Tests.files = files;}, Tests._files);
 
-// do tests
-var pass = 0;
-var fail = 0;
-for (var p=0; p<Tests._testNames.length; p++) {
-    var testName = Tests._testNames[p];
-    var gotError = false;
-    console.log("\n\n" + testName);
-    console.log("=============");
+// run tests
+var conc = page.evaluate(function () {
+    var conc = {"pass":0, "fail":0};
 
-    page.evaluate(function (testName) {
-        var scrEl = document.createElement("script");
-        scrEl.text = "Tests." + testName + "();";
-        document.body.appendChild(scrEl);
-    }, testName);
+    Tests._testNames = Object.keys(Tests).filter(function (item) {
+        return (item[0] !== "_" &&
+                typeof(Tests[item]) === "function" &&
+                item.indexOf("Test") > -1);
+    });
+    console.log("test: " + JSON.stringify(Tests._testNames));
 
-    console.log("=============");
-    if (gotError) {
-        fail += 1;
-        console.log("fail");
-    } else {
-        pass += 1;
-        console.log("pass");
+    var pass = 0;
+    var fail = 0;
+
+    for (var p=0; p<Tests._testNames.length; p++) {
+        var testName = Tests._testNames[p];
+        var gotError = false;
+        console.log("\n\n" + testName);
+        console.log("=============");
+
+        try {
+            Tests[testName]();
+        } catch (e) {
+            console.log(e);
+            if ("stack" in e) {
+                console.log(e["stack"].split("at phantomjs://webpage.evaluate()")[0]);
+            }
+            gotError = true;
+        }
+
+        console.log("=============");
+        if (gotError) {
+            fail += 1;
+            console.log("fail");
+        } else {
+            pass += 1;
+            console.log("pass");
+        }
     }
-}
 
-console.log("\n\nPassed: " + pass);
-console.log("Failed: " + fail);
-if (fail) {
+    conc.pass = pass;
+    conc.fail = fail;
+    return conc;
+});
+
+console.log("\n\nPassed: " + conc.pass);
+console.log("Failed: " + conc.fail);
+if (conc.fail) {
     phantom.exit(1);
 } else {
     phantom.exit();

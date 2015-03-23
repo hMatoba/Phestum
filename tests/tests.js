@@ -49,6 +49,8 @@ Tests.AssertTest = function () {
     phestum.assertNotEqual({"0":"0"}, {"1":"0"});
     phestum.assertNotEqual({"str":"0", "num":0}, {"str":"0", "num":1});
     phestum.assertNotEqual({"obj":{"array":[0, 0]}}, {"obj":{"array":[0, 1]}});
+    
+    console.log("pass assert test.");
 };
 
 
@@ -72,3 +74,28 @@ Tests.FailTest1 = function () {
         throw("fail test");
     });
 };
+
+
+// If test includes async process, method's name must contain 'Async'.
+// Normally, test method starts and it elapses 1.5 sec , phestum checks test finish.
+Tests.AsyncTest = function () {
+    setTimeout(function () {
+        console.log("I'm async process.");
+        Tests._AsyncTest = 1; // When async test finish, set 'Tests._[theTestMethodName] = 1;'
+    }, 100);
+};
+
+
+//Tests.failAsyncTest1 = function () {
+//    setTimeout(function () {
+//        console.log("I'm async process.");
+//        phestum.assertEqual(0, 1);
+//        Tests._AsyncTest = 1;
+//    }, 100);
+//};
+//
+//Tests.failAsyncTest2 = function () {
+//    setTimeout(function () {
+//        console.log("I'm async process.");
+//    }, 100);
+//};

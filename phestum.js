@@ -1,7 +1,7 @@
 var system = require("system");
 var fs = require("fs");
 
-var phestumLib = (function() {/*
+var phestumLib = (function () {/*
 var Tests = {};
 
 var phestum = {
@@ -93,7 +93,7 @@ eval(phestumLib);
 if (fs.isDirectory("tests/files")) {
     Tests._files = {};
     var optionFiles = fs.list("tests/files/")
-            .filter(function(item) {
+            .filter(function (item) {
                 return [".", ".."].indexOf(item) == -1;
             })
             .map(function (item) {
@@ -107,14 +107,11 @@ if (fs.isDirectory("tests/files")) {
 }
 
 // prepare libraries
-Tests._lib = fs.list("lib/")
-        .filter(function(item) {
-            return item.indexOf(".js") !== -1;
-        })
-        .map(function (item) {
-            return 'lib/' + item;
-        });
-console.log("lib: " + JSON.stringify(Tests._lib));
+Tests._libs = [];
+if (system.args.length > 1) {
+    Tests._libs = system.args.slice(1);
+    console.log("lib: " + JSON.stringify(Tests._libs));
+}
 
 // prepare tests
 Tests._tests = fs.list("tests/")
@@ -126,7 +123,7 @@ Tests._tests = fs.list("tests/")
         });
 
 // prepare test environment
-var jsScripts = Tests._lib.concat(Tests._tests);
+var jsScripts = Tests._libs.concat(Tests._tests);
 var page = require('webpage').create();
 page.onError = function (msg, trace) {
     var msgStack = ['ERROR: ' + msg];

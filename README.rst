@@ -25,7 +25,12 @@ Put the test scripts into 'tests' directory. Run phestum.js.
 
     phantomjs phestum.js
 
-Scripts in 'lib' directory will be loaded before tests. 
+Pass script path as argument that should be loaded.
+
+::
+
+    phantomjs phestum.js lib/lib1.js lib/lib2.js
+
 If files exist in tests/files/, it can access the data via 'Tests.files'.
 
 ::

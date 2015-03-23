@@ -143,9 +143,15 @@ page.onConsoleMessage = function(msg, lineNum, sourceId) {
         console.log("\n\nPassed: " + conc.pass);
         console.log("Failed: " + conc.fail);
         if (conc.fail) {
-            phantom.exit(1);
+            //phantom.exit(1);
+            setTimeout(function(){
+                phantom.exit(1);
+            }, 0);
         } else {
-            phantom.exit();
+            //phantom.exit();
+            setTimeout(function(){
+                phantom.exit();
+            }, 0);
         }
     } else {
         console.log('' + msg);
@@ -210,6 +216,7 @@ page.evaluate(function () {
     function recurTests (tests) {
         if (Object.keys(tests).length == 0) {
             console.log("finished phestum tests.");
+            return;
         }
         
         var testName = Object.keys(tests)[0];

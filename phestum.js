@@ -200,7 +200,9 @@ page.evaluate(function () {
             } else {
                 test = function () {
                     try {
-                        Tests[testName]();
+                        Tests[testName](function () {
+                            Tests["_" + testName] = 1;
+                        });
                     } catch (e) {
                         console.log(e);
                         if ("stack" in e) {

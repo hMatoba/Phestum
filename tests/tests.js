@@ -71,17 +71,24 @@ Tests.LibTest = function () {
 
 Tests.FailTest1 = function () {
     phestum.assertFail(function () {
+        console.log("Throw Exception next line.");
         throw("fail test");
+        console.log("This line won't be printed.");
     });
+};
+
+Tests.LibTest = function () {
+    dummyLib1();
+    dummyLib2();
 };
 
 
 // If test includes async process, method's name must contain 'Async'.
 // Normally, test method starts and it elapses 1.5 sec , phestum checks test finish.
-Tests.AsyncTest = function () {
+Tests.AsyncTest = function (finish) {
     setTimeout(function () {
         console.log("I'm async process.");
-        Tests._AsyncTest = 1; // When async test finish, set 'Tests._[theTestMethodName] = 1;'
+        finish(); // When async test finish, run first argument as function'
     }, 100);
 };
 

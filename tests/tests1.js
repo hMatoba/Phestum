@@ -77,32 +77,8 @@ Tests.FailTest1 = function () {
     });
 };
 
+
 Tests.LibTest = function () {
     dummyLib1();
     dummyLib2();
 };
-
-
-// If test includes async process, method's name must contain 'Async'.
-// Normally, test method starts and it elapses 1.5 sec , phestum checks test finish.
-Tests.AsyncTest = function (finish) {
-    setTimeout(function () {
-        console.log("I'm async process.");
-        finish(); // When async test finish, run first argument as function'
-    }, 100);
-};
-
-
-//Tests.failAsyncTest1 = function () {
-//    setTimeout(function () {
-//        console.log("I'm async process.");
-//        phestum.assertEqual(0, 1);
-//        Tests._AsyncTest = 1;
-//    }, 100);
-//};
-//
-//Tests.failAsyncTest2 = function () {
-//    setTimeout(function () {
-//        console.log("I'm async process.");
-//    }, 100);
-//};

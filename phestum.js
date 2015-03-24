@@ -201,8 +201,10 @@ page.evaluate(function () {
                 test = function () {
                     try {
                         Tests[testName](function () {
-                            Tests["_" + testName] = 1;
-                        });
+                                            Tests["_" + testName] = 1;
+                                        }, function (sec) {
+                                            Tests["__" + testName] = sec * 1000;
+                                        });
                     } catch (e) {
                         console.log(e);
                         if ("stack" in e) {
@@ -240,6 +242,7 @@ page.evaluate(function () {
 
             recurTests(tests);
         } else {
+            var secToWait = Tests["__" + testName] || 1000;
             setTimeout(function () {
                 console.log("=============");
                 if (Tests["_" + testName] == 1) {
@@ -251,11 +254,9 @@ page.evaluate(function () {
                     console.log("fail");
                 }
                 recurTests(tests);
-            }, 1000);
+            }, secToWait);
         }
     }
     recurTests(tests);
     
 });
-
-

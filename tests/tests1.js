@@ -76,9 +76,3 @@ Tests.FailTest1 = function () {
         console.log("This line won't be printed.");
     });
 };
-
-
-Tests.LibTest = function () {
-    dummyLib1();
-    dummyLib2();
-};

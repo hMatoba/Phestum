@@ -96,9 +96,6 @@ if (fs.isDirectory("tests/files")) {
     var optionFiles = fs.list("tests/files/")
             .filter(function (item) {
                 return [".", ".."].indexOf(item) == -1;
-            })
-            .map(function (item) {
-                return item;
             });
 
     console.log("files: " + JSON.stringify(optionFiles));

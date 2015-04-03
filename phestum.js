@@ -239,7 +239,7 @@ page.evaluate(function () {
 
             recurTests(tests);
         } else {
-            var secToWait = Tests["__" + testName] || 1000;
+            var secToWait = Tests["__" + testName] || 100;
             setTimeout(function () {
                 console.log("=============");
                 if (Tests["_" + testName] == 1) {

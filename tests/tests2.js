@@ -10,27 +10,12 @@ Tests.AsyncTest1 = function (finish) {
 };
 
 
-// Normally, test method starts and it elapses 1.0 sec, phestum checks test finish.
-// If you want set a time to wait check, run second argument with sec to wait.
+// Normally, test method starts and it elapses 0.1 sec, it checks test finish.
+// If you want set a time to wait for checking, run second argument with sec to wait.
 Tests.AsyncTest2 = function (finish, willFinish) {
-    willFinish(3.0);
+    willFinish(1.2);
     setTimeout(function () {
         console.log("I'm async process.");
         finish();
-    }, 2000);
+    }, 1000);
 };
-
-
-//Tests.failAsyncTest1 = function () {
-//    setTimeout(function () {
-//        console.log("I'm async process.");
-//        phestum.assertEqual(0, 1);
-//        Tests._AsyncTest = 1;
-//    }, 100);
-//};
-//
-//Tests.failAsyncTest2 = function () {
-//    setTimeout(function () {
-//        console.log("I'm async process.");
-//    }, 100);
-//};

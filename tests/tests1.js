@@ -49,6 +49,8 @@ Tests.AssertTest = function () {
     phestum.assertNotEqual({"0":"0"}, {"1":"0"});
     phestum.assertNotEqual({"str":"0", "num":0}, {"str":"0", "num":1});
     phestum.assertNotEqual({"obj":{"array":[0, 0]}}, {"obj":{"array":[0, 1]}});
+    
+    console.log("pass assert test.");
 };
 
 
@@ -69,6 +71,8 @@ Tests.LibTest = function () {
 
 Tests.FailTest1 = function () {
     phestum.assertFail(function () {
+        console.log("Throw Exception next line.");
         throw("fail test");
+        console.log("This line won't be printed.");
     });
 };
